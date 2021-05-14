@@ -3,18 +3,23 @@
 from discord.ext import commands
 from discord import FFmpegPCMAudio
 from discord.opus import load_opus
-from asyncio import sleep
-
 from os.path import join, exists
 from os import getcwd
 from random import choice
+from asyncio import sleep
+
+from settings import Settings
 
 import ctypes.util
 
-client = commands.Bot(command_prefix="^")
+sett = Settings.from_json()
+client = commands.Bot(command_prefix=sett.cmd_prefix)
 script_path = getcwd()
 
+client.settings: Settings = sett
 client.currently_playing: bool = False
+
+
 async def play_sound(ctx, file_name: str):
    opus = ctypes.util.find_library('opus')
    load_opus(opus)
@@ -42,15 +47,10 @@ async def play_sound(ctx, file_name: str):
    await vc.disconnect()
    await ctx.message.delete()
 
+
 async def get_task() -> str:
-   tasks = [
-      "is fixes wires",
-      "is fixes weather node",
-      "making a burger",
-      "is rebooting wifi",
-      "is uploading data"
-   ]
-   return choice(tasks)
+   return choice(client.settings.tasks)
+
 
 @client.command(name='a')
 async def a_command(ctx, arg):
@@ -60,4 +60,4 @@ async def a_command(ctx, arg):
       await ctx.send(f"Amogus {await get_task()}, try in a while")
 
 
-client.run("your token here")
+client.run(sett.app_token)

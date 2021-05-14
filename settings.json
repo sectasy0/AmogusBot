@@ -1,0 +1,12 @@
+{
+    "app_token": "your token here",
+    "cmd_prefix": "^",
+
+    "tasks": [
+        "is fixes wires",
+        "is fixes weather node",
+        "making a burger",
+        "is rebooting wifi",
+        "is uploading data"
+     ]
+}
